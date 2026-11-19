@@ -4,11 +4,12 @@ import { api, formatINR } from '../api.js';
 
 function calc(base) {
   const b = Number(base || 0);
+  const partialNow = Math.round(b * 0.10 * 100) / 100;
   return {
     full: Math.round(b * 0.95 * 100) / 100,
     cod: Math.round(b * 1.10 * 100) / 100,
-    partialNow: Math.round(b * 0.10 * 100) / 100,
-    partialDue: Math.round((b - Math.round(b * 0.10 * 100) / 100) * 100) / 100,
+    partialNow,
+    partialDue: Math.round((b - partialNow) * 100) / 100,
   };
 }
 
@@ -30,35 +31,73 @@ export default function Home() {
   if (error) return <div className="section"><div className="container notice error">{error}</div></div>;
   if (!product) return null;
 
+  const comboItems = (product.comboItems && product.comboItems.length ? product.comboItems : [
+    { name: 'Herbal Vitality Powder', qty: '200g', note: 'Daily wellness blend' },
+    { name: 'Strength Support Capsules', qty: '30 capsules', note: 'Convenient daily support' },
+    { name: 'Energy Booster Tonic', qty: '100ml', note: 'Refreshing vitality tonic' },
+  ]);
+  const highlights = (product.highlights && product.highlights.length ? product.highlights : [
+    'Supports Daily Energy',
+    'Helps Improve Stamina',
+    'Strength & Confidence Support',
+    'Premium Combo Value',
+  ]);
+
   return (
     <>
       <section className="hero">
         <div className="container hero-grid">
           <div className="hero-copy">
-            <span className="badge">Premium Combo Pack</span>
+            <span className="badge">Premium Men’s Wellness Combo</span>
             <h1>{product.name}</h1>
             <p className="lead">{product.subtitle || product.description}</p>
             <div className="hero-actions">
               <Link to="/checkout" className="btn">Buy Now</Link>
-              <a href="#combo" className="btn secondary">See What's Inside</a>
+              <a href="#combo" className="btn secondary">View Combo Details</a>
             </div>
-            <div className="price-strip">
-              <div className="price-chip"><strong>Full Online:</strong> {formatINR(p.full)} <span className="muted">(5% off)</span></div>
-              <div className="price-chip"><strong>COD:</strong> {formatINR(p.cod)} <span className="muted">(10% extra)</span></div>
-              <div className="price-chip"><strong>Partial:</strong> {formatINR(p.partialNow)} now + {formatINR(p.partialDue)} on delivery</div>
-            </div>
-            <div className="hero-points">
-              <div>1 Complete Combo Product</div>
-              <div>Multiple Items Included</div>
-              <div>COD / Online / Partial Payment</div>
-              <div>Fast Shipping & Order Tracking (Admin)</div>
+            <div className="hero-meta">
+              <span>✓ {comboItems.length} Items in 1 Combo</span>
+              <span>✓ COD Available</span>
+              <span>✓ 10% Partial Payment Option</span>
+              <span>✓ 5% Off on Full Online Payment</span>
             </div>
           </div>
-          <div className="product-visual">
-            <div className="eyebrow" style={{color:'#f4ddb0'}}>Featured Combo</div>
-            <div className="combo-bottle">{product.name}</div>
-            <p style={{marginTop:16, color:'#e3efe8'}}>Base Price: <strong style={{color:'#fff'}}>{formatINR(product.basePrice)}</strong></p>
-            <p style={{color:'#cfe0d7', marginBottom:0}}>Choose the payment option that suits you at checkout.</p>
+          <div className="hero-card">
+            <div className="hero-product">
+              <div className="eyebrow" style={{color:'#ffd27a', marginBottom:6}}>Complete Combo Pack</div>
+              <p className="hero-product-name">{product.name}</p>
+              <p className="hero-product-sub">Base Price: {formatINR(product.basePrice)} • Choose your preferred payment option at checkout</p>
+            </div>
+            <div className="hero-price-row">
+              <div className="mini-price"><div className="k">Full Online</div><div className="v">{formatINR(p.full)}</div></div>
+              <div className="mini-price"><div className="k">COD Price</div><div className="v">{formatINR(p.cod)}</div></div>
+              <div className="mini-price"><div className="k">Pay Now (Partial)</div><div className="v">{formatINR(p.partialNow)}</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="strip">
+        <div className="container strip-inner">
+          <div className="strip-item">5% OFF on Full Online Payment</div>
+          <div className="strip-item">COD Available (10% Extra)</div>
+          <div className="strip-item">10% Advance Partial Payment</div>
+          <div className="strip-item">Secure Order & Shipping Support</div>
+        </div>
+      </section>
+
+      <section className="section soft" id="about">
+        <div className="container">
+          <div className="section-head center">
+            <div className="eyebrow">About The Combo</div>
+            <h2>One combo, multiple wellness essentials</h2>
+            <p className="muted" style={{maxWidth:820}}>{product.description} Yeh combo un logon ke liye design kiya gaya hai jo daily routine me energy, stamina aur overall wellness ko support karna chahte hain — ek convenient pack ke saath.</p>
+          </div>
+          <div className="grid stats-grid">
+            <div className="stat-box"><div className="num">{comboItems.length}+</div><div className="lbl">Items Inside Combo</div></div>
+            <div className="stat-box"><div className="num">3</div><div className="lbl">Payment Options</div></div>
+            <div className="stat-box"><div className="num">5%</div><div className="lbl">Online Discount</div></div>
+            <div className="stat-box"><div className="num">10%</div><div className="lbl">Advance Partial Option</div></div>
           </div>
         </div>
       </section>
@@ -67,91 +106,153 @@ export default function Home() {
         <div className="container">
           <div className="section-head">
             <div className="eyebrow">Inside The Combo</div>
-            <h2>Multiple items in one powerful pack</h2>
-            <p className="muted">{product.description}</p>
+            <h2>What you get in this pack</h2>
+            <p className="muted">Combo ke andar multiple items milte hain jisse aapko ek complete value pack milta hai.</p>
           </div>
           <div className="grid includes-grid">
-            {(product.comboItems || []).map((item, i) => (
+            {comboItems.map((item, i) => (
               <div key={i} className="include-item">
-                <div className="qty">{item.qty}</div>
-                <h3 style={{fontFamily:'Manrope, sans-serif', fontSize:'1.15rem', margin:'6px 0'}}>{item.name}</h3>
-                <p className="muted" style={{margin:0}}>{item.note}</p>
+                <div className="qty">{item.qty || 'Included'}</div>
+                <h3>{item.name}</h3>
+                <p className="muted" style={{margin:0}}>{item.note || 'Premium combo item included for your daily routine.'}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="benefits" className="section" style={{background:'var(--surface-alt)'}}>
+      <section id="benefits" className="section dark">
         <div className="container">
-          <div className="section-head">
-            <div className="eyebrow">Why Choose This Combo</div>
-            <h2>Designed for everyday confidence & wellness</h2>
+          <div className="section-head center">
+            <div className="eyebrow">Benefits</div>
+            <h2>Why choose this wellness combo?</h2>
+            <p className="muted" style={{maxWidth:760}}>Play More-style premium presentation ke saath ek practical combo jo daily energy, strength aur confidence support par focus karta hai.</p>
           </div>
           <div className="grid benefits-grid">
-            {(product.highlights && product.highlights.length ? product.highlights : [
-              'Premium combo value', 'Simple daily routine', 'Quality-focused selection', 'Convenient doorstep delivery'
-            ]).map((h, i) => (
+            {highlights.map((h, i) => (
               <div key={i} className="benefit">
+                <div className="icon">{String(i + 1).padStart(2, '0')}</div>
                 <h3>{h}</h3>
-                <p className="muted" style={{margin:0}}>A practical, easy-to-use combo built for consistency and convenience.</p>
+                <p>Carefully selected combo value to support a better daily routine with simple and convenient usage.</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section soft">
+        <div className="container">
+          <div className="section-head">
+            <div className="eyebrow">How To Order</div>
+            <h2>Simple 3-step checkout</h2>
+          </div>
+          <div className="grid includes-grid">
+            <div className="include-item"><div className="qty">Step 1</div><h3>Click Buy Now</h3><p className="muted" style={{margin:0}}>Landing page se Buy Now par click karein aur checkout open karein.</p></div>
+            <div className="include-item"><div className="qty">Step 2</div><h3>Fill Details</h3><p className="muted" style={{margin:0}}>Apni contact aur shipping details fill karein (name, phone, address etc.).</p></div>
+            <div className="include-item"><div className="qty">Step 3</div><h3>Choose Payment</h3><p className="muted" style={{margin:0}}>COD, Full Online (5% off) ya Partial (10% advance) me se option select karke order place karein.</p></div>
           </div>
         </div>
       </section>
 
       <section id="pricing" className="section">
         <div className="container">
-          <div className="section-head">
-            <div className="eyebrow">Flexible Payment Options</div>
-            <h2>Pay the way you prefer</h2>
-            <p className="muted">Base combo price: <strong>{formatINR(product.basePrice)}</strong>. Final payable amount depends on selected payment method.</p>
+          <div className="section-head center">
+            <div className="eyebrow">Pricing & Payment</div>
+            <h2>Flexible payment options for every customer</h2>
+            <p className="muted" style={{maxWidth:760}}>Base combo price <strong>{formatINR(product.basePrice)}</strong> par pricing rules automatically apply hote hain.</p>
           </div>
           <div className="grid pricing-grid">
             <div className="plan featured">
-              <span className="badge">Save 5%</span>
-              <h3 style={{marginTop:10}}>Full Online Payment</h3>
+              <div className="plan-tag">Best Value • Save 5%</div>
+              <h3>Full Online Payment</h3>
               <div className="amount">{formatINR(p.full)}</div>
+              <div className="sub">Pay complete amount now</div>
               <ul>
                 <li>5% discount on base price</li>
-                <li>Pay complete amount now</li>
                 <li>Fastest order confirmation</li>
+                <li>Secure online payment flow</li>
+                <li>Demo gateway enabled (gateway final pending)</li>
               </ul>
             </div>
             <div className="plan">
               <h3>Cash on Delivery</h3>
               <div className="amount">{formatINR(p.cod)}</div>
+              <div className="sub">Pay on delivery</div>
               <ul>
                 <li>10% COD charge added</li>
-                <li>Pay full amount on delivery</li>
+                <li>Full amount collected on delivery</li>
                 <li>Convenient doorstep payment</li>
+                <li>Order confirmed instantly in system</li>
               </ul>
             </div>
             <div className="plan">
               <h3>Partial Payment</h3>
-              <div className="amount">{formatINR(p.partialNow)} <span className="muted" style={{fontSize:'1rem', fontWeight:600}}>now</span></div>
+              <div className="amount">{formatINR(p.partialNow)}</div>
+              <div className="sub">Pay 10% now + {formatINR(p.partialDue)} on delivery</div>
               <ul>
-                <li>Pay 10% advance now ({formatINR(p.partialNow)})</li>
-                <li>Remaining 90% on delivery ({formatINR(p.partialDue)})</li>
-                <li>Total combo price: {formatINR(product.basePrice)}</li>
+                <li>Only 10% advance online now</li>
+                <li>Remaining 90% on delivery</li>
+                <li>Total combo price remains {formatINR(product.basePrice)}</li>
+                <li>Demo gateway enabled (gateway final pending)</li>
               </ul>
             </div>
           </div>
-          <div style={{marginTop:24}}>
-            <Link to="/checkout" className="btn">Proceed to Buy Now</Link>
+          <div style={{marginTop:24, textAlign:'center'}}>
+            <Link to="/checkout" className="btn">Proceed to Checkout</Link>
+          </div>
+        </div>
+      </section>
+
+      <section id="reviews" className="section soft">
+        <div className="container">
+          <div className="section-head center">
+            <div className="eyebrow">Customer Experience</div>
+            <h2>Trusted by customers looking for a premium combo</h2>
+            <p className="muted">Demo testimonials section (aap baad me real reviews/content se replace kar sakte hain).</p>
+          </div>
+          <div className="grid reviews-grid">
+            {[
+              { name: 'Rahul S.', text: 'Combo pack ka presentation aur value dono achhe lage. Checkout process simple tha aur payment options helpful hain.' },
+              { name: 'Amit K.', text: 'Partial payment option kaafi convenient laga. Order details clear the aur confirmation turant mil gaya.' },
+              { name: 'Vikas P.', text: 'Landing page premium feel deta hai aur product combo clearly explain kiya gaya hai. COD option bhi useful hai.' },
+            ].map((r, i) => (
+              <div key={i} className="review">
+                <div className="stars">★★★★★</div>
+                <p style={{marginBottom:10}}>{r.text}</p>
+                <p className="muted" style={{margin:0, fontWeight:700}}>{r.name}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <div className="eyebrow">FAQs</div>
+            <h2>Common questions</h2>
+          </div>
+          <div className="grid faq-grid">
+            <div className="faq"><h3>Payment options kaun se hain?</h3><p className="muted" style={{margin:0}}>Aap Full Online (5% discount), COD (10% extra), ya Partial Payment (10% abhi, 90% delivery par) choose kar sakte hain.</p></div>
+            <div className="faq"><h3>Partial payment ka matlab kya hai?</h3><p className="muted" style={{margin:0}}>Base price ka 10% advance online pay karna hota hai, aur remaining 90% delivery ke time collect hota hai.</p></div>
+            <div className="faq"><h3>Online payment gateway kaunsa hai?</h3><p className="muted" style={{margin:0}}>Gateway abhi final nahi hai, isliye demo/simulated online payment flow diya gaya hai. Real gateway baad me integrate kiya ja sakta hai.</p></div>
+            <div className="faq"><h3>Order details kahan manage hongi?</h3><p className="muted" style={{margin:0}}>Admin panel me orders, shipping details, payment status aur products (add/delete) manage kar sakte hain.</p></div>
           </div>
         </div>
       </section>
 
       <section className="section" style={{paddingTop:0}}>
-        <div className="container card">
-          <div className="card-body" style={{display:'flex', justifyContent:'space-between', gap:20, alignItems:'center', flexWrap:'wrap'}}>
+        <div className="container">
+          <div className="cta-banner">
             <div>
-              <h2 style={{marginBottom:6}}>Ready to order your combo?</h2>
-              <p className="muted" style={{margin:0}}>Fill shipping details, choose payment option, and place your order in minutes.</p>
+              <div className="eyebrow" style={{marginBottom:6}}>Ready to Order?</div>
+              <h2 style={{marginBottom:6}}>Get your {product.name} today</h2>
+              <p>Contact & shipping details fill karein, payment option choose karein, aur order place karein.</p>
             </div>
-            <Link to="/checkout" className="btn">Buy Now</Link>
+            <div style={{display:'flex', gap:10, flexWrap:'wrap'}}>
+              <Link to="/checkout" className="btn">Buy Now</Link>
+              <a href="#pricing" className="btn secondary">View Pricing</a>
+            </div>
           </div>
         </div>
       </section>

@@ -73,14 +73,14 @@ export default function Checkout() {
 
         <div className="checkout-layout">
           <form className="card form-card" onSubmit={submit}>
-            <h3 style={{fontFamily:'Manrope, sans-serif'}}>Contact Details</h3>
+            <h3 style={{fontFamily:'inherit'}}>Contact Details</h3>
             <div className="form-grid" style={{marginTop:12}}>
               <div className="field"><label>Full Name *</label><input required value={form.name} onChange={e=>set('name', e.target.value)} placeholder="Your full name" /></div>
               <div className="field"><label>Phone Number *</label><input required value={form.phone} onChange={e=>set('phone', e.target.value)} placeholder="10-digit mobile number" /></div>
               <div className="field full"><label>Email (optional)</label><input type="email" value={form.email} onChange={e=>set('email', e.target.value)} placeholder="you@example.com" /></div>
             </div>
 
-            <h3 style={{fontFamily:'Manrope, sans-serif', marginTop:22}}>Shipping Address</h3>
+            <h3 style={{fontFamily:'inherit', marginTop:22}}>Shipping Address</h3>
             <div className="form-grid" style={{marginTop:12}}>
               <div className="field full"><label>Address *</label><textarea required value={form.address} onChange={e=>set('address', e.target.value)} placeholder="House/Flat, Street, Area" /></div>
               <div className="field"><label>City *</label><input required value={form.city} onChange={e=>set('city', e.target.value)} /></div>
@@ -88,7 +88,7 @@ export default function Checkout() {
               <div className="field"><label>Pincode *</label><input required value={form.pincode} onChange={e=>set('pincode', e.target.value)} /></div>
             </div>
 
-            <h3 style={{fontFamily:'Manrope, sans-serif', marginTop:22}}>Payment Option</h3>
+            <h3 style={{fontFamily:'inherit', marginTop:22}}>Payment Option</h3>
             <div className="pay-options" style={{marginTop:12}}>
               {[
                 { id: 'full_online', title: 'Full Payment (Online)', desc: `Pay ${formatINR(prices.full_online.now)} now • 5% discount applied` },
@@ -116,7 +116,7 @@ export default function Checkout() {
           </form>
 
           <aside className="card card-body" style={{position:'sticky', top:90}}>
-            <h3 style={{fontFamily:'Manrope, sans-serif'}}>Order Summary</h3>
+            <h3 style={{fontFamily:'inherit'}}>Order Summary</h3>
             <p style={{fontWeight:700, marginBottom:4}}>{product.name}</p>
             <p className="muted" style={{fontSize:'.95rem'}}>Combo with {(product.comboItems||[]).length || 'multiple'} items</p>
             <div style={{marginTop:14}}>

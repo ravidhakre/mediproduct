@@ -48,7 +48,7 @@ export default function Success() {
 
             <div className="card" style={{marginTop:18, boxShadow:'none'}}>
               <div className="card-body">
-                <h3 style={{fontFamily:'Manrope, sans-serif'}}>Payment Summary</h3>
+                <h3 style={{fontFamily:'inherit'}}>Payment Summary</h3>
                 <div className="summary-row"><span>Product</span><strong>{order.product?.name}</strong></div>
                 <div className="summary-row"><span>Base Price</span><strong>{formatINR(order.payment?.basePrice)}</strong></div>
                 <div className="summary-row"><span>Total Payable</span><strong>{formatINR(order.payment?.totalPayable)}</strong></div>
@@ -59,7 +59,7 @@ export default function Success() {
 
             <div className="card" style={{marginTop:14, boxShadow:'none'}}>
               <div className="card-body">
-                <h3 style={{fontFamily:'Manrope, sans-serif'}}>Shipping Details</h3>
+                <h3 style={{fontFamily:'inherit'}}>Shipping Details</h3>
                 <p style={{marginBottom:4}}><strong>{order.customer?.name}</strong> • {order.customer?.phone}{order.customer?.email ? ` • ${order.customer.email}` : ''}</p>
                 <p className="muted" style={{margin:0}}>{order.shipping?.address}, {order.shipping?.city}, {order.shipping?.state} - {order.shipping?.pincode}</p>
               </div>

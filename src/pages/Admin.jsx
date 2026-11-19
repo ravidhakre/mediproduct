@@ -132,7 +132,7 @@ function ProductsPanel() {
     <div className="stack">
       {error && <div className="notice error">{error}</div>}
       <div className="card card-body">
-        <h3 style={{fontFamily:'Manrope, sans-serif'}}>Add Combo Product</h3>
+        <h3 style={{fontFamily:'inherit'}}>Add Combo Product</h3>
         <p className="muted">Abhi 1 active combo product storefront par dikhaya jayega (active products me se pehla). Aap naya add karke purana delete kar sakte hain.</p>
         <form onSubmit={create} className="form-grid" style={{marginTop:12}}>
           <div className="field"><label>Name *</label><input required value={form.name} onChange={e=>set('name',e.target.value)} /></div>
@@ -147,7 +147,7 @@ function ProductsPanel() {
       </div>
 
       <div className="card card-body">
-        <div className="toolbar" style={{justifyContent:'space-between'}}><h3 style={{fontFamily:'Manrope, sans-serif', margin:0}}>Products</h3><button className="btn secondary" onClick={load}>Refresh</button></div>
+        <div className="toolbar" style={{justifyContent:'space-between'}}><h3 style={{fontFamily:'inherit', margin:0}}>Products</h3><button className="btn secondary" onClick={load}>Refresh</button></div>
         {loading ? <p>Loading...</p> : (
           <div className="table-wrap" style={{marginTop:12}}>
             <table>
@@ -249,7 +249,7 @@ export default function Admin() {
             </div>
             <div className="grid" style={{gridTemplateColumns:'repeat(auto-fit,minmax(260px,1fr))'}}>
               <div className="card card-body">
-                <h3 style={{fontFamily:'Manrope, sans-serif'}}>By Status</h3>
+                <h3 style={{fontFamily:'inherit'}}>By Status</h3>
                 {!stats ? <p className="muted">Loading...</p> : (
                   <ul style={{margin:0, paddingLeft:18}}>
                     {Object.entries(stats.byStatus||{}).map(([k,v])=> <li key={k}><strong>{k}</strong>: {v}</li>)}
@@ -258,7 +258,7 @@ export default function Admin() {
                 )}
               </div>
               <div className="card card-body">
-                <h3 style={{fontFamily:'Manrope, sans-serif'}}>By Payment Method</h3>
+                <h3 style={{fontFamily:'inherit'}}>By Payment Method</h3>
                 {!stats ? <p className="muted">Loading...</p> : (
                   <ul style={{margin:0, paddingLeft:18}}>
                     {Object.entries(stats.byPaymentMethod||{}).map(([k,v])=> <li key={k}><strong>{k}</strong>: {v}</li>)}
